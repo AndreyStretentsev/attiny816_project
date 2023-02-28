@@ -5,6 +5,7 @@ TARGET = hub6_attiny
 INC_DIR = src
 SRC_DIR = src
 SRC = $(wildcard $(SRC_DIR)/*.c)
+INC = $(wildcard $(INC_DIR)/*.h)
 ASRC = 
 OPT = s
 PROG_TOOL = updiprog
@@ -107,14 +108,14 @@ $(OUTDIR)/$(TARGET).eep: $(OUTDIR)/$(TARGET).elf
 
 # Create extended listing file from ELF output file.
 $(OUTDIR)/$(TARGET).lss: $(OUTDIR)/$(TARGET).elf
-	$(OBJDUMP) -h -S -masm=intel $< > $@
+	$(OBJDUMP) -h -S $< > $@
 
 # Create a symbol table from ELF output file.
 $(OUTDIR)/$(TARGET).sym: $(OUTDIR)/$(TARGET).elf
 	$(NM) -n $< > $@
 
 # Link: create ELF output file from object files.
-$(OUTDIR)/$(TARGET).elf: makedir $(OBJ) $(ASM)
+$(OUTDIR)/$(TARGET).elf: makedir linter $(OBJ) $(ASM)
 	$(CC) $(ALL_CFLAGS) $(OBJ) -o $@ $(LDFLAGS)
 
 
@@ -133,6 +134,9 @@ $(OUTDIR)/%.o: $(SRC_DIR)/%.s
 makedir: | $(OUTDIR)
 $(OUTDIR):
 	mkdir -p $@
+
+linter: 
+	clang-format -i -style=file $(SRC) $(INC)
 
 # Target: clean project.
 clean:

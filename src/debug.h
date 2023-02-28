@@ -7,7 +7,6 @@ void TRACE_INIT(void);
 #else
 #define TRACE(o, ...) ((void)0)
 #define TRACE_INIT() ((void)0)
-#endif // __DEBUG 
+#endif // __DEBUG
 
-#endif	/* DEBUG_H */
-
+#endif /* DEBUG_H */
