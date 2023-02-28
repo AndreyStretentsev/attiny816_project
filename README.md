@@ -10,7 +10,7 @@ To build debug version run command:
 To build release version run command:
 > make release
 
-It's necessary to clean project outputs before every build by running:
+To clean outputs of the project run:
 > make clean
 
 ## Running
