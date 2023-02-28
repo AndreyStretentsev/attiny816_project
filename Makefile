@@ -28,10 +28,10 @@ CINCS =
 CDEBUG = -D$(DEBUG)
 CWARN = -Wall --param=min-pagesize=0
 CTUNING = -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
+CEXTRA = -Wa,-adhlns=$(addprefix $(OUTDIR)/,$(notdir $(<:.c=.lst)))
 CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CSTANDARD) $(CEXTRA)
 
-ASFLAGS = -Wa,-adhlns=$(<:.S=.lst)
+ASFLAGS = -Wa,-adhlns=$(addprefix $(OUTDIR)/,$(notdir $(<:.s=.lst)))
 
 #Additional libraries.
 
@@ -53,7 +53,7 @@ LDFLAGS = $(EXTMEMOPTS) $(LDMAP) $(PRINTF_LIB) $(MATH_LIB)
 
 CC = avr-gcc
 OBJCOPY = avr-objcopy
-OBJDUMP = avr-objdump
+OBJDUMP = D:/Downloads/avr-gcc-12/bin/avr-objdump
 SIZE = avr-size
 NM = avr-nm
 REMOVE = rm -f
@@ -62,6 +62,7 @@ MV = mv -f
 # Define all object files.
 OBJ = $(addprefix $(OUTDIR)/,$(notdir $(SRC:.c=.o))) $(addprefix $(OUTDIR)/,$(notdir $(ASRC:.s=.o))) 
 ASM = $(addprefix $(OUTDIR)/,$(notdir $(SRC:.c=.asm)))  
+
 # Define all listing files.
 LST = $(addprefix $(OUTDIR)/,$(notdir $(SRC:.c=.lst))) $(addprefix $(OUTDIR)/,$(notdir $(ASRC:.s=.lst)))
 
@@ -106,31 +107,30 @@ $(OUTDIR)/$(TARGET).eep: $(OUTDIR)/$(TARGET).elf
 
 # Create extended listing file from ELF output file.
 $(OUTDIR)/$(TARGET).lss: $(OUTDIR)/$(TARGET).elf
-	$(OBJDUMP) -h -S $< > $@
+	$(OBJDUMP) -h -S -masm=intel $< > $@
 
 # Create a symbol table from ELF output file.
 $(OUTDIR)/$(TARGET).sym: $(OUTDIR)/$(TARGET).elf
 	$(NM) -n $< > $@
 
 # Link: create ELF output file from object files.
-$(OUTDIR)/$(TARGET).elf: $(OBJ) $(ASM)
+$(OUTDIR)/$(TARGET).elf: makedir $(OBJ) $(ASM)
 	$(CC) $(ALL_CFLAGS) $(OBJ) -o $@ $(LDFLAGS)
 
+
+# Compile: create assembler files from C source files.
+$(OUTDIR)/%.asm: $(OUTDIR)/%.o
+	$(OBJDUMP) -d -Mintel -S $< > $@
 
 # Compile: create object files from C source files.
 $(OUTDIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $(ALL_CFLAGS) $< -o $@ 
 
-
-# Compile: create assembler files from C source files.
-$(OUTDIR)/%.asm: $(SRC_DIR)/%.c
-	$(CC) -S $(ALL_CFLAGS) $< -o $@
-
-
 # Assemble: create object files from assembler source files.
 $(OUTDIR)/%.o: $(SRC_DIR)/%.s
 	$(CC) -c $(ALL_ASFLAGS) $< -o $@
 
+makedir: | $(OUTDIR)
 $(OUTDIR):
 	mkdir -p $@
 

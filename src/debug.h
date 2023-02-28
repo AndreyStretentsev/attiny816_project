@@ -1,7 +1,7 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#if (__DEBUG == 1)
+#ifdef __DEBUG
 void TRACE(char *msg, ...);
 void TRACE_INIT(void);
 #else
