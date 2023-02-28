@@ -1,0 +1,247 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.global	mute
+  11               	mute:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14               	/* stack size = 0 */
+  15               	.L__stack_usage = 0
+  16 0000 87E0      		ldi r24,lo8(7)
+  17 0002 8093 4404 		sts 1092,r24
+  18               	/* epilogue start */
+  19 0006 0895      		ret
+  21               	.global	unmute
+  23               	unmute:
+  24               	/* prologue: function */
+  25               	/* frame size = 0 */
+  26               	/* stack size = 0 */
+  27               	.L__stack_usage = 0
+  28 0008 1092 4404 		sts 1092,__zero_reg__
+  29               	/* epilogue start */
+  30 000c 0895      		ret
+  32               	.global	unknown_command
+  34               	unknown_command:
+  35               	/* prologue: function */
+  36               	/* frame size = 0 */
+  37               	/* stack size = 0 */
+  38               	.L__stack_usage = 0
+  39               	/* epilogue start */
+  40 000e 0895      		ret
+  42               	.global	exec_cmd
+  44               	exec_cmd:
+  45               	/* prologue: function */
+  46               	/* frame size = 0 */
+  47               	/* stack size = 0 */
+  48               	.L__stack_usage = 0
+  49 0010 8031      		cpi r24,16
+  50 0012 9105      		cpc r25,__zero_reg__
+  51 0014 01F0      		breq .L5
+  52 0016 8F97      		sbiw r24,47
+  53 0018 01F0      		breq .L6
+  54 001a 0895      		ret
+  55               	.L5:
+  56 001c 87E0      		ldi r24,lo8(7)
+  57 001e 8093 4404 		sts 1092,r24
+  58 0022 0895      		ret
+  59               	.L6:
+  60 0024 1092 4404 		sts 1092,__zero_reg__
+  61               	/* epilogue start */
+  62 0028 0895      		ret
+  64               	.global	__vector_21
+  66               	__vector_21:
+  67 002a 8F93 8FB7 		__gcc_isr 1
+  67      8F93 
+  68 0030 9F93      		push r25
+  69               	/* prologue: Signal */
+  70               	/* frame size = 0 */
+  71               	/* stack size = 1...5 */
+  72               	.L__stack_usage = 1 + __gcc_isr.n_pushed
+  73 0032 8091 2308 		lds r24,2083
+  74 0036 87FF      		sbrs r24,7
+  75 0038 00C0      		rjmp .L9
+  76 003a 8091 2408 		lds r24,2084
+  77 003e 90E0      		ldi r25,0
+  78 0040 8093 0000 		sts spi,r24
+  79 0044 9093 0000 		sts spi+1,r25
+  80               	.L9:
+  81 0048 8091 2308 		lds r24,2083
+  82 004c 80FF      		sbrs r24,0
+  83 004e 00C0      		rjmp .L10
+  84 0050 81E0      		ldi r24,lo8(1)
+  85 0052 8093 0000 		sts spi+3,r24
+  86               	.L10:
+  87 0056 8091 2308 		lds r24,2083
+  88 005a 8068      		ori r24,lo8(-128)
+  89 005c 8093 2308 		sts 2083,r24
+  90               	/* epilogue start */
+  91 0060 9F91      		pop r25
+  92 0062 8F91 8FBF 		__gcc_isr 2
+  92      8F91 
+  93 0068 1895      		reti
+  94               		__gcc_isr 0,r24
+  96               	.global	__vector_3
+  98               	__vector_3:
+  99 006a 8F93 8FB7 		__gcc_isr 1
+  99      8F93 
+ 100               	/* prologue: Signal */
+ 101               	/* frame size = 0 */
+ 102               	/* stack size = 0...4 */
+ 103               	.L__stack_usage = 0 + __gcc_isr.n_pushed
+ 104 0070 8091 0904 		lds r24,1033
+ 105 0074 85FF      		sbrs r24,5
+ 106 0076 00C0      		rjmp .L14
+ 107 0078 81E0      		ldi r24,lo8(1)
+ 108 007a 8093 0000 		sts spi+2,r24
+ 109 007e 8091 0904 		lds r24,1033
+ 110 0082 8062      		ori r24,lo8(32)
+ 111 0084 8093 0904 		sts 1033,r24
+ 112               	.L14:
+ 113               	/* epilogue start */
+ 114 0088 8F91 8FBF 		__gcc_isr 2
+ 114      8F91 
+ 115 008e 1895      		reti
+ 116               		__gcc_isr 0,r24
+ 118               	.global	spi_init
+ 120               	spi_init:
+ 121               	/* prologue: function */
+ 122               	/* frame size = 0 */
+ 123               	/* stack size = 0 */
+ 124               	.L__stack_usage = 0
+ 125 0090 E0E0      		ldi r30,0
+ 126 0092 F4E0      		ldi r31,lo8(4)
+ 127 0094 8AE1      		ldi r24,lo8(26)
+ 128 0096 8283      		std Z+2,r24
+ 129 0098 84E0      		ldi r24,lo8(4)
+ 130 009a 8183      		std Z+1,r24
+ 131 009c E0E2      		ldi r30,lo8(32)
+ 132 009e F8E0      		ldi r31,lo8(8)
+ 133 00a0 8081      		ld r24,Z
+ 134 00a2 8F7D      		andi r24,lo8(-33)
+ 135 00a4 8083      		st Z,r24
+ 136 00a6 8081      		ld r24,Z
+ 137 00a8 8160      		ori r24,lo8(1)
+ 138 00aa 8083      		st Z,r24
+ 139 00ac 8281      		ldd r24,Z+2
+ 140 00ae 8168      		ori r24,lo8(-127)
+ 141 00b0 8283      		std Z+2,r24
+ 142               	/* epilogue start */
+ 143 00b2 0895      		ret
+ 145               	.global	clk_init
+ 147               	clk_init:
+ 148               	/* prologue: function */
+ 149               	/* frame size = 0 */
+ 150               	/* stack size = 0 */
+ 151               	.L__stack_usage = 0
+ 152 00b4 61E0      		ldi r22,lo8(1)
+ 153 00b6 81E6      		ldi r24,lo8(97)
+ 154 00b8 90E0      		ldi r25,0
+ 155 00ba 00C0      		rjmp ccp_write_io
+ 157               	.global	gpio_init
+ 159               	gpio_init:
+ 160               	/* prologue: function */
+ 161               	/* frame size = 0 */
+ 162               	/* stack size = 0 */
+ 163               	.L__stack_usage = 0
+ 164 00bc E0E4      		ldi r30,lo8(64)
+ 165 00be F4E0      		ldi r31,lo8(4)
+ 166 00c0 87E0      		ldi r24,lo8(7)
+ 167 00c2 8183      		std Z+1,r24
+ 168 00c4 8FEF      		ldi r24,lo8(-1)
+ 169 00c6 8683      		std Z+6,r24
+ 170 00c8 E0E0      		ldi r30,0
+ 171 00ca F4E0      		ldi r31,lo8(4)
+ 172 00cc 8281      		ldd r24,Z+2
+ 173 00ce 8062      		ori r24,lo8(32)
+ 174 00d0 8283      		std Z+2,r24
+ 175 00d2 82E0      		ldi r24,lo8(2)
+ 176 00d4 858B      		std Z+21,r24
+ 177               	/* epilogue start */
+ 178 00d6 0895      		ret
+ 180               	.global	init
+ 182               	init:
+ 183               	/* prologue: function */
+ 184               	/* frame size = 0 */
+ 185               	/* stack size = 0 */
+ 186               	.L__stack_usage = 0
+ 187               	/* #APP */
+ 188               	 ;  108 "src/main.c" 1
+ 189 00d8 F894      		cli
+ 190               	 ;  0 "" 2
+ 191               	/* #NOAPP */
+ 192 00da 00D0      		rcall clk_init
+ 193 00dc 00D0      		rcall gpio_init
+ 194 00de 00D0      		rcall spi_init
+ 195               	/* #APP */
+ 196               	 ;  113 "src/main.c" 1
+ 197 00e0 7894      		sei
+ 198               	 ;  0 "" 2
+ 199               	/* #NOAPP */
+ 200               	/* epilogue start */
+ 201 00e2 0895      		ret
+ 203               		.section	.text.startup,"ax",@progbits
+ 204               	.global	main
+ 206               	main:
+ 207               	/* prologue: function */
+ 208               	/* frame size = 0 */
+ 209               	/* stack size = 0 */
+ 210               	.L__stack_usage = 0
+ 211 0000 00D0      		rcall init
+ 212               	.L25:
+ 213 0002 8091 0000 		lds r24,spi
+ 214 0006 9091 0000 		lds r25,spi+1
+ 215 000a 2091 0000 		lds r18,spi+2
+ 216 000e 2223      		tst r18
+ 217 0010 01F0      		breq .L27
+ 218 0012 00D0      		rcall exec_cmd
+ 219 0014 1092 0000 		sts spi+2,__zero_reg__
+ 220               	.L27:
+ 221 0018 8091 0000 		lds r24,spi+3
+ 222 001c 8823      		tst r24
+ 223 001e 01F0      		breq .L25
+ 224 0020 1092 0000 		sts spi+3,__zero_reg__
+ 225 0024 00C0      		rjmp .L25
+ 227               	.global	spi
+ 228               		.section .bss
+ 231               	spi:
+ 232 0000 0000 0000 		.zero	4
+ 233               		.ident	"GCC: (GNU) 12.1.0"
+ 234               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:2      *ABS*:000000000000003e __SP_H__
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:3      *ABS*:000000000000003d __SP_L__
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:4      *ABS*:000000000000003f __SREG__
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:5      *ABS*:0000000000000034 __CCP__
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:6      *ABS*:0000000000000000 __tmp_reg__
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:7      *ABS*:0000000000000001 __zero_reg__
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:11     .text:0000000000000000 mute
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:23     .text:0000000000000008 unmute
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:34     .text:000000000000000e unknown_command
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:44     .text:0000000000000010 exec_cmd
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:66     .text:000000000000002a __vector_21
+                            *ABS*:0000000000000002 __gcc_isr.n_pushed.001
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:231    .bss:0000000000000000 spi
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:98     .text:000000000000006a __vector_3
+                            *ABS*:0000000000000002 __gcc_isr.n_pushed.002
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:120    .text:0000000000000090 spi_init
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:147    .text:00000000000000b4 clk_init
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:159    .text:00000000000000bc gpio_init
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:182    .text:00000000000000d8 init
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:206    .text.startup:0000000000000000 main
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:55     .text:000000000000001c .L5
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:59     .text:0000000000000024 .L6
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:80     .text:0000000000000048 .L9
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:86     .text:0000000000000056 .L10
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:112    .text:0000000000000088 .L14
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:220    .text.startup:0000000000000018 .L27
+C:\Users\f_t_\AppData\Local\Temp\ccjfusPA.s:212    .text.startup:0000000000000002 .L25
+
+UNDEFINED SYMBOLS
+ccp_write_io
+__do_clear_bss
