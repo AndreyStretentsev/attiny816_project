@@ -1,7 +1,9 @@
 # Attiny816 example project
 
 ## Requirements
-AVR-GCC 12 is requiered to build project. UPDIPROG utility is used to flash device via USB/UART.
+- avr-gcc 12 is requiered to build project; 
+- [updiprog](https://github.com/Polarisru/updiprog) utility is used to flash device via USB/UART;
+- clang-format 11.0 or newer is required to use static code analyzer.
 
 ## Building
 To build debug version run command:
