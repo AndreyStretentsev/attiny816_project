@@ -90,14 +90,17 @@ release:
 	make DEBUG=nDEBUG all
 
 # Default target.
-all: elf hex lss
+all: elf hex lss bin
 
 elf: $(OUTDIR)/$(TARGET).elf
 hex: $(OUTDIR)/$(TARGET).hex
 eep: $(OUTDIR)/$(TARGET).eep
 lss: $(OUTDIR)/$(TARGET).lss 
 sym: $(OUTDIR)/$(TARGET).sym 
+bin: $(OUTDIR)/$(TARGET).bin 
 
+$(OUTDIR)/$(TARGET).bin: $(OUTDIR)/$(TARGET).elf
+	$(OBJCOPY) -O binary -R .eeprom $< $@
 
 $(OUTDIR)/$(TARGET).hex: $(OUTDIR)/$(TARGET).elf
 	$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
@@ -141,6 +144,6 @@ linter:
 # Target: clean project.
 clean:
 	$(REMOVE) $(OUTDIR)/$(TARGET).hex $(OUTDIR)/$(TARGET).eep $(OUTDIR)/$(TARGET).cof $(OUTDIR)/$(TARGET).elf \
-	$(OUTDIR)/$(TARGET).map $(OUTDIR)/$(TARGET).sym $(OUTDIR)/$(TARGET).lss \
-	$(OBJ) $(ASM) $(LST) $(OUTDIR)/$(SRC:.c=.s) $(OUTDIR)/$(SRC:.c=.d)
+	$(OUTDIR)/$(TARGET).map $(OUTDIR)/$(TARGET).sym $(OUTDIR)/$(TARGET).lss $(OUTDIR)/$(TARGET).bin \
+	$(OBJ) $(ASM) $(LST) $(OUTDIR)/$(SRC:.c=.s) $(OUTDIR)/$(SRC:.c=.d) 
 
